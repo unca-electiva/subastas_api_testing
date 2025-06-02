@@ -37,6 +37,12 @@ class AnuncioSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['publicado_por', 'oferta_ganadora']
 
+    def validate(self, data):
+        # Validar si el precio de la oferta es mayor que el precio inicial del anuncio
+        if data['fecha_fin'] and data['fecha_inicial'] <= data['fecha_fin']:
+            raise ValidationError("La Fecha Fin debe ser posterior a la Fecha de Inicio de oferta del artículo.")
+        return data
+
 
 class OfertaAnuncioSerializer(serializers.ModelSerializer):
     class Meta:
